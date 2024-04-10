@@ -1,7 +1,7 @@
 -- common options
 local options = {
-	noremap = true -- non-recursive
-	silent = false -- show message
+	noremap = true, -- non-recursive
+	silent = false, -- show message
 }
 
 -- ----------- --
@@ -9,7 +9,7 @@ local options = {
 -- ----------- --
 -- Window Navigation
 vim.keymap.set('n', '<C-h>', '<C-w>h', options)
-vim.kepmap.set('n', '<C-j>', '<C-w>j', options)
+vim.keymap.set('n', '<C-j>', '<C-w>j', options)
 vim.keymap.set('n', '<C-k>', '<C-w>k', options)
 vim.keymap.set('n', '<C-l>', '<C-w>l', options)
 -- Resizing
