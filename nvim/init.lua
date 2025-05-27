@@ -36,8 +36,8 @@ require("lazy").setup({
 
     -- require("themes.calvera"),
 
-    require("themes.gruvbox_baby"),
-
+    -- require("themes.gruvbox_baby"),
+    require("themes.darcula"),
 
 
     -- plugins
