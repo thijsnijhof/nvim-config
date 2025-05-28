@@ -6,7 +6,7 @@ return {
 			require("darcula").setup({})
 		end,
 		opts = function()
-			vim.cmd.colorscheme('darcula')
-		end,	
+			vim.cmd.colorscheme("darcula-dark")
+		end,
 	},
 }

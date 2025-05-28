@@ -24,18 +24,14 @@ vim.opt.rtp:prepend(lazypath)
 local git_related = require("plugins.git_related")
 local mason = require("plugins.mason")
 local telescope_setup, telescope_fzf_native_setup = require("plugins.telescope")
+local darcula = require("plugins.darcula")
 
 
 
 -- info: Setup the plugins
 require("lazy").setup({
     -- themes
-    -- require("themes.night_owl"), -- for night
-
-    -- require("themes.evergarden"), -- for morning
-
-    -- require("themes.calvera"),
-
+    darcula,
     -- require("themes.gruvbox_baby"),
     require("themes.darcula"),
 
