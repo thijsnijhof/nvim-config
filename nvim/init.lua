@@ -1,6 +1,3 @@
---  Author: Krasen Hristov
-
-
 -- Tell the Lua language server that `vim` is a global variable
 _G.vim = vim
 
@@ -26,15 +23,11 @@ local mason = require("plugins.mason")
 local telescope_setup, telescope_fzf_native_setup = require("plugins.telescope")
 local darcula = require("plugins.darcula")
 
-
-
 -- info: Setup the plugins
 require("lazy").setup({
     -- themes
     darcula,
-    -- require("themes.gruvbox_baby"),
     require("themes.darcula"),
-
 
     -- plugins
     require("plugins.lua_snip"),
@@ -67,11 +60,7 @@ require("lazy").setup({
 
     require("plugins.comment"),
 
-    -- require("plugins.copilot"),
-
     require("plugins.tree_sitter"),
-
-    -- require("plugins.copilot_chat"),
 
     require("plugins.jester"),
 
@@ -98,8 +87,6 @@ require("lazy").setup({
     require("plugins.scrollbar"),
 
     require("plugins.cheatsheet"),
-
-    -- require("plugins.vim-dadbod-ui"),
 
     require("plugins.git_messenger"),
 
