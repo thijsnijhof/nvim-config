@@ -32,3 +32,6 @@ vim.api.nvim_set_keymap('n', '<Esc>', ':noh<CR><Esc>', { noremap = true, silent 
 
 -- navigate to next / previous methods
 vim.api.nvim_set_keymap('n', '<leader>fm', '/\\v(public|protected|private|function)\\s+.*\\(\\)<CR>', { noremap = true, silent = true })
+
+-- open cheatsheet
+vim.api.nvim_set_keymap('n', '<leader>cs', ':Cheatsheet<CR>', { noremap = true, silent = true })
