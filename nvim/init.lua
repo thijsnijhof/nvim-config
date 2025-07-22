@@ -92,6 +92,8 @@ require("lazy").setup({
 
     require("plugins.smear_cursor"),
 
+    require("plugins.spamguard"),
+
     telescope_setup,
     telescope_fzf_native_setup,
     -- add more
