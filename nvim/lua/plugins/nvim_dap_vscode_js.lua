@@ -4,7 +4,7 @@ return {
         "mfussenegger/nvim-dap"
     },
     config = function ()
-       require("nvim_dap_vscode_js").setup({
+       require("nvim-dap-vscode-js").setup({
         -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
         debugger_path = "~/git/vscode-js-debug", -- Path to vscode-js-debug installation.
         -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
