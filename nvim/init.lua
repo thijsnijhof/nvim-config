@@ -90,6 +90,8 @@ require("lazy").setup({
 
     require("plugins.git_messenger"),
 
+    require("plugins.smear_cursor"),
+
     telescope_setup,
     telescope_fzf_native_setup,
     -- add more
