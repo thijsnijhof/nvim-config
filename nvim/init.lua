@@ -27,7 +27,8 @@ local telescope_setup, telescope_fzf_native_setup = require("plugins.telescope")
 require("lazy").setup({
    -- themes
    --darcula,
-   -- require("themes.darcula"),
+    -- require("themes.darcula"),
+    require("themes.gruvbox_baby"),
 
     -- plugins
     require("plugins.lua_snip"),
