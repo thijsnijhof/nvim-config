@@ -1,6 +1,6 @@
 root = true
 
-[*.{rs,ts,tsx,js,spec.js,php}]
+[*.{rs,ts,tsx,js,spec.js,php,lua}]
 indent_style = space
 indent_size = 4
 charset = utf-8
