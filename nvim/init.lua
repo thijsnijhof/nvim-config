@@ -92,7 +92,7 @@ require("lazy").setup({
 
     require("plugins.smear_cursor"),
 
-    require("plugins.vim-dadbod-ui"),
+    --require("plugins.vim-dadbod-ui"),
 
     telescope_setup,
     telescope_fzf_native_setup,
