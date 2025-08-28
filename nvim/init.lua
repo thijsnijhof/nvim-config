@@ -95,6 +95,10 @@ require("lazy").setup({
 
     --require("plugins.vim-dadbod-ui"),
 
+    -- DAP (Debug Adapter Protocol)
+    require("plugins.nvim_dap"),
+    require("plugins.nvim_dap_ui"),
+
     telescope_setup,
     telescope_fzf_native_setup,
     -- add more
@@ -115,3 +119,4 @@ require("keymaps.jester_keymaps")
 require("keymaps.lsp_saga_keymaps")
 require("keymaps.neoclip_keymaps")
 require("keymaps.git_keymaps")
+require("keymaps.dap_keymaps")
