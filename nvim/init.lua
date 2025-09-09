@@ -47,7 +47,52 @@ require("lazy").setup({
     require("plugins.cmp"),
 
     -- PHP development
-    require("plugins.php_actor"),
+    {
+        'neovim/nvim-lspconfig',
+        ft = 'php',
+        config = function()
+            local lspconfig = require('lspconfig')
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
+            
+            lspconfig.phpactor.setup {
+                cmd = { os.getenv('HOME') .. '/.composer/vendor/bin/phpactor', 'language-server' },
+                on_attach = function(client, bufnr)
+                    -- Your on_attach configuration here
+                    local bufopts = { noremap=true, silent=true, buffer=bufnr }
+                    vim.keymap.set('n', '<leader>cf', function()
+                        vim.lsp.buf.references({
+                            includeDeclaration = false,
+                            bufnr = bufnr
+                        })
+                    end, vim.tbl_extend('force', bufopts, { desc = 'Find references (optimized)' }))
+                end,
+                capabilities = capabilities,
+                settings = {
+                    phpactor = {
+                        maxMemory = '4G',
+                        enableLanguageServer = true,
+                        indexingEnabled = true,
+                        completionEnabled = true,
+                        indexingExclude = {
+                            'vendor',
+                            'node_modules',
+                            'tests',
+                            'var',
+                            'cache',
+                            'build',
+                            'tmp',
+                        },
+                        references = {
+                            ignoreHidden = true,
+                            ignoreVendors = true,
+                            ignoreTests = true,
+                            limit = 100
+                        }
+                    }
+                }
+            }
+        end
+    },
 
     {
         "neovim/nvim-lspconfig",

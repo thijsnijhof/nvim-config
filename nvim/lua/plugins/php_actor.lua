@@ -1,8 +1,13 @@
 local M = {}
 
 function M.setup()
+    -- Skip if not in a PHP file
+    if vim.bo.filetype ~= 'php' then
+        return
+    end
+
     -- Configure PHP Actor for better performance
-    vim.g.phpactorPhpBin = 'php'
+    vim.g.phpactorPhpBin = vim.fn.exepath('php')
     vim.g.phpactorBranch = 'master'
     vim.g.phpactorCompletionEnabled = 1
     vim.g.phpactorCompletionPriority = 1
