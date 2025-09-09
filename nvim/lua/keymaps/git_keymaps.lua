@@ -5,7 +5,21 @@ vim.api.nvim_set_keymap('n', '<leader>gg', ':GitMessenger<CR>',
 -- File history and blame
 vim.keymap.set('n', '<leader>gh', ':Gclog<CR>', { desc = 'View file history' })
 vim.keymap.set('n', '<leader>gH', ':Gclog -p<CR>', { desc = 'Preview file history' })
-vim.keymap.set('n', '<leader>gm', ':<C-U>Gclog -p -L <C-R>=expand("<cword>")<CR>:<C-R>=expand("%")<CR>:0<CR>', { desc = 'Show method history' })
+vim.keymap.set('n', '<leader>gm', function()
+    -- Get current method/function name using treesitter if available
+    local method_name = vim.fn.expand('<cword>')
+    local file_path = vim.fn.expand('%:p')
+    
+    -- Use Git's built-in function search
+    local cmd = string.format('G log -L :%s:%s -p', method_name, file_path)
+    vim.cmd(cmd)
+    
+    -- If the above fails, fall back to a simple search-based approach
+    if vim.v.shell_error ~= 0 then
+        vim.notify('Could not find function history. Trying search-based approach...', vim.log.levels.WARN)
+        vim.cmd('Gclog -S"function ' .. method_name .. '" -p')
+    end
+end, { desc = 'Show method history' })
 vim.keymap.set('v', '<leader>gm', ":'<,'>Gclog -p<CR>", { desc = 'Show history for selection' })
 vim.keymap.set('n', '<leader>gB', ':Git blame<CR>', { desc = 'Toggle git blame' })
 
