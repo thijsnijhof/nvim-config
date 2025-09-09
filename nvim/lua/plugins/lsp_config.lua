@@ -38,7 +38,15 @@ function M.setup()
 
     local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-    for _, server in ipairs({ "lua_ls", "phpactor", "ts_ls", "pyright", "jsonls", "sqlls", "yamlls"}) do
+    -- Configure PHP Actor with full path
+    lspconfig.phpactor.setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = { os.getenv('HOME') .. '/.composer/vendor/bin/phpactor', 'language-server' },
+    }
+
+    -- Configure other language servers
+    for _, server in ipairs({ "lua_ls", "ts_ls", "pyright", "jsonls", "sqlls", "yamlls"}) do
         lspconfig[server].setup {
             on_attach = on_attach,
             capabilities = capabilities,
