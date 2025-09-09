@@ -46,6 +46,9 @@ require("lazy").setup({
 
     require("plugins.cmp"),
 
+    -- PHP development
+    require("plugins.php_actor"),
+
     {
         "neovim/nvim-lspconfig",
         config = function()
