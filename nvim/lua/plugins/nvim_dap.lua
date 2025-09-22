@@ -37,14 +37,14 @@ local M = {}
 
 function M.setup()
     local dap = require('dap')
-    
+
     -- Node.js debugging (requires vscode-node-debug2)
     dap.adapters.node2 = {
         type = 'executable',
         command = 'node',
         args = {os.getenv('HOME') .. '/.local/share/nvim/mason/packages/node-debug2-adapter/out/src/nodeDebug.js'},
     }
-    
+
     dap.configurations.javascript = {
         {
             name = 'Launch',
@@ -63,16 +63,36 @@ function M.setup()
             processId = require'dap.utils'.pick_process,
         },
     }
-    
+
     dap.configurations.typescript = dap.configurations.javascript
-    
+
+    -- Apollo Admin Ecom configuration
+    table.insert(dap.configurations.typescript, {
+        name = 'Debug Apollo Admin Ecom',
+        type = 'node2',
+        request = 'launch',
+        runtimeExecutable = 'npm',
+        runtimeArgs = {'run', 'dev'},
+        cwd = '${workspaceFolder}',
+        console = 'integratedTerminal',
+        sourceMaps = true,
+        protocol = 'inspector',
+        port = 9229,
+        skipFiles = {'<node_internals>/**'},
+        outFiles = {'${workspaceFolder}/dist/**/*.js'},
+        resolveSourceMapLocations = {
+            '${workspaceFolder}/**',
+            '!**/node_modules/**',
+        }
+    })
+
     -- PHP debugging (requires Xdebug)
     dap.adapters.php = {
         type = 'executable',
         command = 'node',
         args = { os.getenv('HOME') .. '/.local/share/nvim/mason/packages/php-debug-adapter/extension/out/phpDebug.js' }
     }
-    
+
     dap.configurations.php = {
         {
             type = 'php',
@@ -100,7 +120,7 @@ function M.setup()
             }
         }
     }
-    
+
     -- Signs for breakpoints
     vim.fn.sign_define('DapBreakpoint', {text='🔴', texthl='', linehl='', numhl=''})
     vim.fn.sign_define('DapBreakpointCondition', {text='🟡', texthl='', linehl='', numhl=''})
