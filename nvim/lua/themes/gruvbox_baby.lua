@@ -10,17 +10,16 @@ function M.toggle_theme()
     vim.cmd[[colorscheme gruvbox-baby]]
 end
 
--- Set keymap to toggle theme
-vim.api.nvim_set_keymap('n', '<leader>tt', 
-    [[<cmd>lua require('themes.gruvbox_baby').toggle_theme()<CR>]], 
-    { noremap = true, silent = true, desc = 'Toggle between light and dark theme' })
-
 return {
     { 'luisiacc/gruvbox-baby',
         config = function()
             vim.g.gruvbox_baby_background_color = 'dark'  -- Default to dark mode
             vim.g.gruvbox_baby_transparent_mode = true
             vim.cmd[[colorscheme gruvbox-baby]]
+            
+            -- Set keymap to toggle theme (moved inside config to ensure plugin is loaded)
+            vim.keymap.set('n', '<leader>tt', M.toggle_theme, 
+                { noremap = true, silent = true, desc = 'Toggle between light and dark theme' })
         end
     },
 }
