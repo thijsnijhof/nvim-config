@@ -160,6 +160,7 @@ require('settings')
 
 
 -- info: keymaps setup
+require("keymaps.theme_keymaps")
 require("keymaps.general_keymaps")
 require('keymaps.nvim_tree_keymaps')
 require("keymaps.fzf_keymaps")
