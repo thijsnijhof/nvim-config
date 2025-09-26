@@ -45,7 +45,10 @@ require("lazy").setup({
     mason[1], mason[2],
 
     require("plugins.cmp"),
-
+    
+    -- Docker
+    require("plugins.docker"),
+    
     -- PHP development
     {
         'neovim/nvim-lspconfig',
@@ -101,6 +104,9 @@ require("lazy").setup({
         end
     },
 
+    require("plugins.copilot"),
+    require("plugins.copilot_chat"),
+    
     require("plugins.which_key"),
 
     require("plugins.git_signs"),
