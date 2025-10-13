@@ -1,51 +1,49 @@
 return {
-  "jamestthompson3/nvim-docker",
+  "jamestthompson3/nvim-remote-containers",
   dependencies = {
     "nvim-telescope/telescope.nvim",
+    "mfussenegger/nvim-dap"  -- For debugging in containers
   },
   cmd = {
-    "DockerContainers",
-    "DockerImages",
-    "DockerVolumes",
-    "DockerNetworks",
-    "DockerCompose",
+    "AttachContainer",
+    "BuildImage",
+    "Compose",
+    "ComposeUp",
+    "ComposeDown",
+    "ComposeLogs",
   },
   config = function()
-    local docker = require('docker')
-    local actions = require('docker.actions')
+    -- Define keymaps first to avoid conflicts
+    local keymap = vim.keymap
+    local opts = { silent = true, noremap = true }
     
-    docker.setup({
+    -- Set up the plugin
+    require('remote-containers').setup({
       -- Default configuration
-      default = {
-        attach_shell = 'zsh',  -- You can change this to your preferred shell
-        auto_refresh = true,   -- Auto-refresh containers, images, etc.
-        auto_hide = true,      -- Auto-hide popup after selection
+      attach_mounts = {
+        vim = true,  -- Mount the local Neovim config
+        nvim = true, -- Mount the local Neovim config (for nvim 0.9+)
       },
-      
-      -- Keymaps configuration
-      keymaps = {
-        global = {
-          -- Toggle the Docker window
-          { '<leader>dd', '<cmd>DockerContainers<cr>', desc = 'Docker Containers' },
-          { '<leader>di', '<cmd>DockerImages<cr>',     desc = 'Docker Images' },
-          { '<leader>dv', '<cmd>DockerVolumes<cr>',    desc = 'Docker Volumes' },
-          { '<leader>dn', '<cmd>DockerNetworks<cr>',   desc = 'Docker Networks' },
-          { '<leader>dc', '<cmd>DockerCompose<cr>',    desc = 'Docker Compose' },
-        },
-        -- You can add more specific keymaps for different views
-        containers = {
-          { 'o', actions.select, { nowait = true } },
-          { 'l', actions.select, { nowait = true } },
-          { '<CR>', actions.select, { nowait = true } },
-          { 's', actions.toggle_logs },
-          { 'r', actions.restart_container },
-          { 'S', actions.stop_container },
-          { 'R', actions.remove_container },
-        },
-        images = {
-          { 'r', actions.remove_image },
-        },
-      },
+    })
+    
+    -- Function key mappings for Docker
+    keymap.set('n', '<F6>', ':AttachContainer<CR>', vim.tbl_extend('force', opts, { desc = 'Attach to container' }))
+    keymap.set('n', '<F7>', ':BuildImage<CR>', vim.tbl_extend('force', opts, { desc = 'Build container image' }))
+    keymap.set('n', '<F8>', ':ComposeUp<CR>', vim.tbl_extend('force', opts, { desc = 'Docker Compose Up' }))
+    keymap.set('n', '<F9>', ':ComposeDown<CR>', vim.tbl_extend('force', opts, { desc = 'Docker Compose Down' }))
+    keymap.set('n', '<F10>', ':ComposeLogs<CR>', vim.tbl_extend('force', opts, { desc = 'Docker Compose Logs' }))
+    
+    -- Buffer-local keymaps for container actions
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'DockerContainer',
+      callback = function()
+        local buf_opts = { buffer = true, silent = true, noremap = true }
+        keymap.set('n', 'o', ':lua require("remote-containers").open()<CR>', buf_opts)
+        keymap.set('n', 's', ':lua require("remote-containers").start()<CR>', buf_opts)
+        keymap.set('n', 'S', ':lua require("remote-containers").stop()<CR>', buf_opts)
+        keymap.set('n', 'r', ':lua require("remote-containers").restart()<CR>', buf_opts)
+        keymap.set('n', 'l', ':lua require("remote-containers").logs()<CR>', buf_opts)
+      end,
     })
   end,
 }
