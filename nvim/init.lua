@@ -46,6 +46,9 @@ require("lazy").setup({
 
     require("plugins.cmp"),
     
+    -- Inlay hints on current line
+    require("plugins.inlay_hints"),
+    
     -- Docker
     require("plugins.docker"),
     
