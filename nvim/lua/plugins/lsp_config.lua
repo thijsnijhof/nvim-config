@@ -14,7 +14,12 @@ function M.setup()
     local on_attach = function(client, bufnr)
         -- Enable inlay hints if the server supports it
         if client.server_capabilities.inlayHintProvider then
-            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+            -- Delay enabling inlay hints to ensure server is fully ready
+            vim.defer_fn(function()
+                pcall(function()
+                    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+                end)
+            end, 100)
         end
 
         local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -42,7 +47,9 @@ function M.setup()
 
         -- Toggle inlay hints
         keymap('n', '<leader>th', function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+            pcall(function()
+                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+            end)
         end, vim.tbl_extend("force", opts, { desc = "Toggle inlay hints" }))
     end
 
