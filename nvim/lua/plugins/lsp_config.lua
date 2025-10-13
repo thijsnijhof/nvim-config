@@ -46,10 +46,16 @@ function M.setup()
             vim.tbl_extend("force", opts, { desc = "Format document" }))
 
         -- Toggle inlay hints
-        keymap('n', '<leader>th', function()
+        keymap('n', '<leader>ih', function()
+            local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
             pcall(function()
-                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+                vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
             end)
+            if not enabled then
+                vim.notify("Inlay hints enabled", vim.log.levels.INFO)
+            else
+                vim.notify("Inlay hints disabled", vim.log.levels.INFO)
+            end
         end, vim.tbl_extend("force", opts, { desc = "Toggle inlay hints" }))
     end
 
