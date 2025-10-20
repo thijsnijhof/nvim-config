@@ -3,103 +3,144 @@
 local M = {}
 
 function M.setup()
+    -- Ensure plugins are loaded
+    local ok, lspconfig = pcall(require, 'lspconfig')
+    if not ok then
+        vim.notify('Failed to load nvim-lspconfig', vim.log.levels.ERROR)
+        return
+    end
+    
+    -- Ensure mason is loaded
+    local mason_ok, _ = pcall(require, 'mason')
+    if not mason_ok then
+        vim.notify('Mason not found. Please install it first.', vim.log.levels.ERROR)
+        return
+    end
+    
+    -- Configure mason
     require("mason").setup()
     require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "ts_ls", "pyright", "jsonls", "sqlls", "yamlls"},
-        automatic_enable = false,
+        ensure_installed = { "lua_ls", "tsserver", "pyright", "jsonls", "sqlls", "yamlls" },
+        automatic_installation = false,
     })
-
-    local lspconfig = require("lspconfig")
-
+    
+    -- Initialize inlay hints
+    local inlay_hint = vim.lsp.buf.inlay_hint or vim.lsp.inlay_hint
+    
     local on_attach = function(client, bufnr)
-        -- Enable inlay hints if the server supports it
-        if client.server_capabilities.inlayHintProvider then
-            -- Delay enabling inlay hints to ensure server is fully ready
-            vim.defer_fn(function()
-                pcall(function()
-                    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-                end)
-            end, 100)
-        end
-
+        -- Set up position encoding
+        client.offset_encoding = client.offset_encoding or 'utf-16'
+        
+        -- Set up keymaps
         local opts = { noremap = true, silent = true, buffer = bufnr }
         local keymap = vim.keymap.set
+        
+        -- Navigation
         keymap('n', 'gD', vim.lsp.buf.declaration, vim.tbl_extend("force", opts, { desc = "Go to declaration" }))
         keymap('n', 'gd', vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
-        keymap('n', 'gi', vim.lsp.buf.implementation,
-            vim.tbl_extend("force", opts, { desc = "Go to implementation" }))
-        keymap('n', '<C-k>', vim.lsp.buf.signature_help,
-            vim.tbl_extend("force", opts, { desc = "Show signature information" }))
-        keymap('n', '<leader>wa', vim.lsp.buf.add_workspace_folder,
-            vim.tbl_extend("force", opts, { desc = "Add workspace folder" }))
-        keymap('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder,
-            vim.tbl_extend("force", opts, { desc = "Remove workspace folder" }))
+        keymap('n', 'gi', vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Go to implementation" }))
+        keymap('n', '<C-k>', vim.lsp.buf.signature_help, vim.tbl_extend("force", opts, { desc = "Show signature help" }))
+        
+        -- Workspace
+        keymap('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, vim.tbl_extend("force", opts, { desc = "Add workspace folder" }))
+        keymap('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, vim.tbl_extend("force", opts, { desc = "Remove workspace folder" }))
         keymap('n', '<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end,
             vim.tbl_extend("force", opts, { desc = "List workspace folders" }))
-        keymap('n', '<leader>D', vim.lsp.buf.type_definition,
-            vim.tbl_extend("force", opts, { desc = "Go to type definition" }))
+        
+        -- Code actions
+        keymap('n', '<leader>D', vim.lsp.buf.type_definition, vim.tbl_extend("force", opts, { desc = "Go to type definition" }))
         keymap('n', '<leader>rn', vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename symbol" }))
-        keymap('n', '<leader>ca', vim.lsp.buf.code_action,
-            vim.tbl_extend("force", opts, { desc = "Show code actions" }))
-        keymap('n', 'gr', vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "List references" }))
-        keymap('n', '<leader>fr', function() vim.lsp.buf.format { async = true } end,
-            vim.tbl_extend("force", opts, { desc = "Format document" }))
+        keymap('n', '<leader>ca', vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code actions" }))
+        
+        -- Enhanced references with quickfix list
+        keymap('n', 'gr', function()
+            vim.lsp.buf.references(nil, {
+                on_list = function(options)
+                    vim.fn.setqflist({}, ' ', options)
+                    vim.cmd('copen')
+                end
+            })
+        end, vim.tbl_extend("force", opts, { desc = "References" }))
+        
+        -- Formatting with better options
+        keymap('n', '<leader>fr', function() 
+            vim.lsp.buf.format({
+                async = true,
+                timeout_ms = 5000,
+                name = client.name,
+                filter = function(c)
+                    return c.name ~= 'tsserver' and c.name ~= 'lua_ls'
+                end,
+            }) 
+        end, vim.tbl_extend("force", opts, { desc = "Format document" }))
 
         -- Toggle inlay hints
-        keymap('n', '<leader>ih', function()
-            local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
-            pcall(function()
-                vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
-            end)
-            if not enabled then
-                vim.notify("Inlay hints enabled", vim.log.levels.INFO)
-            else
-                vim.notify("Inlay hints disabled", vim.log.levels.INFO)
-            end
-        end, vim.tbl_extend("force", opts, { desc = "Toggle inlay hints" }))
+        if inlay_hint and client.supports_method('textDocument/inlayHint') then
+            keymap('n', 'yh', function()
+                inlay_hint.enable(bufnr, not inlay_hint.is_enabled(bufnr))
+                vim.notify('Inlay hints ' .. (inlay_hint.is_enabled(bufnr) and 'enabled' or 'disabled'))
+            end, vim.tbl_extend("force", opts, { desc = "Toggle inlay hints" }))
+        end
     end
 
-    local capabilities = require('cmp_nvim_lsp').default_capabilities()
+    -- Set up capabilities
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-    -- Configure TypeScript with enhanced inlay hints
-    lspconfig.ts_ls.setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        settings = {
-            typescript = {
-                inlayHints = {
-                    includeInlayParameterNameHints = 'all',
-                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                    includeInlayFunctionParameterTypeHints = true,
-                    includeInlayVariableTypeHints = true,
-                    includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-                    includeInlayPropertyDeclarationTypeHints = true,
-                    includeInlayFunctionLikeReturnTypeHints = true,
-                    includeInlayEnumMemberValueHints = true,
-                }
-            },
-            javascript = {
-                inlayHints = {
-                    includeInlayParameterNameHints = 'all',
-                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                    includeInlayFunctionParameterTypeHints = true,
-                    includeInlayVariableTypeHints = true,
-                    includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-                    includeInlayPropertyDeclarationTypeHints = true,
-                    includeInlayFunctionLikeReturnTypeHints = true,
-                    includeInlayEnumMemberValueHints = true,
+    -- Configure servers
+    local servers = {
+        lua_ls = {
+            settings = {
+                Lua = {
+                    runtime = { version = 'LuaJIT' },
+                    diagnostics = { globals = { 'vim' } },
+                    workspace = {
+                        library = vim.api.nvim_get_runtime_file("", true),
+                        checkThirdParty = false
+                    },
+                    telemetry = { enable = false }
                 }
             }
-        }
+        },
+        tsserver = {
+            settings = {
+                typescript = {
+                    inlayHints = {
+                        includeInlayParameterNameHints = 'all',
+                        includeInlayFunctionParameterTypeHints = true,
+                        includeInlayVariableTypeHints = true,
+                    }
+                },
+                javascript = {
+                    inlayHints = {
+                        includeInlayParameterNameHints = 'all',
+                        includeInlayFunctionParameterTypeHints = true,
+                        includeInlayVariableTypeHints = true,
+                    }
+                }
+            }
+        },
+        pyright = {},
+        jsonls = {},
+        sqlls = {},
+        yamlls = {}
     }
 
-    -- Configure language servers (excluding ts_ls since it's configured above)
-    for _, server in ipairs({ "lua_ls", "pyright", "jsonls", "sqlls", "yamlls" }) do
-        lspconfig[server].setup {
-            on_attach = on_attach,
-            capabilities = capabilities,
-        }
+    -- Setup each server
+    for server, config in pairs(servers) do
+        config.on_attach = on_attach
+        config.capabilities = capabilities
+        
+        -- Use the new API to set up the server
+        local ok, server_config = pcall(require, 'lspconfig.server_configurations.' .. server)
+        if ok then
+            server_config.setup(config)
+        else
+            lspconfig[server].setup(config)
+        end
     end
+    
+    vim.notify('LSP configuration loaded successfully')
 end
 
 return M

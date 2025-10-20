@@ -12,18 +12,21 @@ return {
                 params.context = { includeDeclaration = true }
                 vim.lsp.buf_request(0, "textDocument/inlayHint", params, function(err, result, ctx)
                     if err then
-                        error(err)
+                        vim.notify_once("Inlay hint error: " .. (err.message or "unknown error"), vim.log.levels.ERROR)
+                        return
                     end
                     if not result or not result.result then
                         return
                     end
                     local hints = {}
                     for _, hint in ipairs(result.result) do
-                        if hint.placement then
+                        if hint and type(hint) == "table" and hint.position and hint.position.character then
                             table.insert(hints, hint)
                         end
                     end
-                    vim.lsp.inlay_hint.render(hints, {})
+                    if #hints > 0 then
+                        vim.lsp.inlay_hint.render(hints, {})
+                    end
                 end)
             end,
         })

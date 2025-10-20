@@ -46,6 +46,20 @@ require("lazy").setup({
 
     require("plugins.cmp"),
     
+    -- LSP Configuration
+    {
+        'neovim/nvim-lspconfig',
+        event = 'BufReadPre',
+        dependencies = {
+            'williamboman/mason.nvim',
+            'williamboman/mason-lspconfig.nvim',
+            'hrsh7th/cmp-nvim-lsp',
+        },
+        config = function()
+            require('plugins.lsp_config').setup()
+        end
+    },
+
     -- Inlay hints on current line
     require("plugins.inlay_hints"),
     
@@ -113,8 +127,8 @@ require("lazy").setup({
         end
     },
 
-    require("plugins.copilot"),
-    require("plugins.copilot_chat"),
+    -- require("plugins.copilot"),
+    -- require("plugins.copilot_chat"),
     
     require("plugins.which_key"),
 
