@@ -20,8 +20,15 @@ function M.setup()
     -- Configure mason
     require("mason").setup()
     require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "tsserver", "pyright", "jsonls", "sqlls", "yamlls" },
-        automatic_installation = false,
+        ensure_installed = { 
+            "lua_ls", 
+            "tsserver", 
+            "pyright", 
+            "jsonls", 
+            "sqlls", 
+            "yamlls" 
+        },
+        automatic_installation = true,
     })
     
     -- Initialize inlay hints
@@ -30,6 +37,11 @@ function M.setup()
     local on_attach = function(client, bufnr)
         -- Set up position encoding
         client.offset_encoding = client.offset_encoding or 'utf-16'
+        
+        -- Enable inlay hints if available
+        if inlay_hint then
+            inlay_hint.enable(true, { bufnr = bufnr })
+        end
         
         -- Set up keymaps
         local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -89,6 +101,42 @@ function M.setup()
 
     -- Configure servers
     local servers = {
+        tsserver = {
+            cmd = { "typescript-language-server", "--stdio" },
+            filetypes = { 
+                "javascript", 
+                "javascriptreact", 
+                "javascript.jsx", 
+                "typescript", 
+                "typescriptreact", 
+                "typescript.tsx" 
+            },
+            root_dir = function() 
+                return vim.fs.dirname(vim.fs.find({'package.json'}, { upward = true })[1])
+            end,
+            settings = {
+                typescript = {
+                    inlayHints = {
+                        includeInlayParameterNameHints = 'all',
+                        includeInlayFunctionParameterTypeHints = true,
+                        includeInlayVariableTypeHints = true,
+                        includeInlayPropertyDeclarationTypeHints = true,
+                        includeInlayFunctionLikeReturnTypeHints = true,
+                        includeInlayEnumMemberValueHints = true,
+                    }
+                },
+                javascript = {
+                    inlayHints = {
+                        includeInlayParameterNameHints = 'all',
+                        includeInlayFunctionParameterTypeHints = true,
+                        includeInlayVariableTypeHints = true,
+                        includeInlayPropertyDeclarationTypeHints = true,
+                        includeInlayFunctionLikeReturnTypeHints = true,
+                        includeInlayEnumMemberValueHints = true,
+                    }
+                }
+            },
+        },
         lua_ls = {
             settings = {
                 Lua = {
@@ -99,24 +147,6 @@ function M.setup()
                         checkThirdParty = false
                     },
                     telemetry = { enable = false }
-                }
-            }
-        },
-        tsserver = {
-            settings = {
-                typescript = {
-                    inlayHints = {
-                        includeInlayParameterNameHints = 'all',
-                        includeInlayFunctionParameterTypeHints = true,
-                        includeInlayVariableTypeHints = true,
-                    }
-                },
-                javascript = {
-                    inlayHints = {
-                        includeInlayParameterNameHints = 'all',
-                        includeInlayFunctionParameterTypeHints = true,
-                        includeInlayVariableTypeHints = true,
-                    }
                 }
             }
         },
