@@ -1,0 +1,162 @@
+# Personal Neovim cheatsheet. Leader = Space. Keys are case-sensitive.
+# Normal mode unless labelled insert, visual, or operator/visual.
+# This describes the repository configuration; copy it to ~/.config/nvim to activate.
+# macOS function keys may require Fn; Option combinations depend on iTerm2 settings.
+
+## Help @cheatsheet @keys
+Open searchable cheatsheet | <Space>cs
+Edit installed personal cheatsheet | :CheatsheetEdit
+Inspect the source of a mapping | :verbose nmap {keys}
+Find help topics | <Space>sh
+
+## Files and search @telescope @navigation
+Find files by name | <Space>sf
+Search text across project (requires ripgrep) | <Space>sg
+Search project for word under cursor | <Space>sw
+Search within current buffer | <Space>/
+Switch open buffers | <Space><Space>
+Find recently opened files | <Space>?
+Search diagnostics | <Space>sd
+Toggle file tree | <F3>
+Reveal current file in tree | <F4>
+Toggle Git-ignored files in tree | <F9>
+
+## Editing @clipboard @windows
+Move to left Neovim window | <C-h>
+Move to right Neovim window | <C-l>
+Move to window above (built-in) | <C-w>k
+Move to window below (built-in) | <C-w>j
+Copy current line to system clipboard | Y
+Copy visual selection to system clipboard (visual) | Y
+Move selected lines up (visual) | [
+Move selected lines down (visual) | ]
+Clear search highlighting | <Esc>
+Begin whole-file substitute prompt (enter pattern and replacement) | <Space>rr
+Replace line contents and enter insert mode | dr
+Append semicolon (Command key; terminal support required) | <D-w>
+
+## Language navigation @lsp @lspsaga @php
+# Native LSP mappings require an attached language server.
+Go to declaration | gD
+Go to definition | gd
+Go to implementation | gi
+Show references in quickfix list | gr
+Show signature help | <C-k>
+Show documentation in Lspsaga hover | K
+Open Lspsaga finder | <Space>cf
+Peek type definition | <Space>ct
+Go to type definition | <Space>D
+Toggle file symbol outline | <Space>co
+Show incoming calls | <Space>ce
+Show outgoing calls | <Space>cq
+Rename symbol with Lspsaga | <Space>cr
+Rename symbol with native LSP | <Space>rn
+Show code actions | <Space>ca
+Toggle native inlay hints (supported servers only) | yh
+Add workspace folder | <Space>wa
+Remove workspace folder | <Space>wr
+List workspace folders | <Space>wl
+
+## Diagnostics @errors @warnings
+Show current-line diagnostics | <Space>cdd
+Show cursor diagnostics | <Space>cdc
+Show all buffer diagnostics | <Space>cda
+Previous diagnostic | <Space>cde
+Next diagnostic | <Space>cdq
+
+## Formatting @prettier @php @lua @bash
+# Manual formatting only; no format-on-save. Requires installed formatter executables.
+Format document with configured formatter | <Space>fr
+Check formatter availability and logs | :ConformInfo
+Install formatting tools with Mason | :MasonInstall prettier stylua shfmt php-cs-fixer
+Open language/tool installer | :Mason
+Check attached language servers | :checkhealth vim.lsp
+Open language-server log | :LspLog
+
+## Completion and snippets @insert
+Trigger completion (insert) | <C-Space>
+Accept completion, selecting first candidate if needed (insert) | <Tab>
+Next completion or expand/advance snippet (insert/select) | <A-e>
+Previous completion or previous snippet field (insert/select) | <A-q>
+Scroll completion documentation up (insert) | <C-d>
+Scroll completion documentation down (insert) | <C-f>
+Open clipboard history | <Space>yy
+Open recorded macro history | <Space>yq
+
+## Syntax selection @treesitter @textobjects
+# Text objects require an appropriate installed parser.
+Start/grow syntax selection (normal/visual) | <C-Space>
+Grow selection to scope (visual) | <C-s>
+Shrink syntax selection (visual) | <M-Space>
+Select outer/inner parameter (operator/visual) | aa / ia
+Select outer/inner function (operator/visual) | af / if
+Select outer/inner class (operator/visual) | ac / ic
+Next/previous function start | ]m / [m
+Next/previous function end | ]M / [M
+Next/previous class start | ]] / [[
+Next/previous class end | ][ / []
+Swap parameter with next | <Space>a
+Swap parameter with previous | <Space>A
+
+## Git history and diffs @git @fugitive @gitsigns
+Show commit message for current line (GitMessenger) | <Space>gg
+Show current file history | <Space>gh
+Show current file history with patches | <Space>gH
+Show function history using word under cursor (Git-dependent) | <Space>gm
+Show selected-line history (visual) | <Space>gm
+Toggle inline blame | <Space>gb
+Open full file blame | <Space>gB
+Compare working file with staged version | <Space>gs
+Compare current file with HEAD in vertical split | :Gvdiffsplit HEAD
+Open Git status | :Git
+Show repository diff | :Git diff
+Next/previous changed hunk or diff block | ]c / [c
+Preview current hunk | :Gitsigns preview_hunk
+Stage current hunk | :Gitsigns stage_hunk
+Reset current hunk (discards its changes) | :Gitsigns reset_hunk
+Next history/quickfix entry | :cnext
+Previous history/quickfix entry | :cprevious
+Close quickfix window | :cclose
+
+## Merge conflicts @git @merge
+# Use in Fugitive's three-way diff layout; verify source buffers before applying.
+Open three-way merge diff | <Space>gd
+Get change from diff buffer 2 (normally local) | <Space>gl
+Get change from diff buffer 4 (normally remote) | <Space>gr
+Run local then remote diffget (NOT automatic keep-both; review result) | <Space>gM
+Next/previous diff block | <Space>gn / <Space>gp
+
+## Debugging @dap @breakpoints @php @javascript
+# Requires language adapters and runtime setup. PHP also requires Xdebug.
+Start/continue debugger | <F5>
+Step into | <F1>
+Step over | <F2>
+Step out | <F6>
+Toggle debugger UI | <F7>
+Toggle breakpoint | <Space>b
+Set conditional breakpoint | <Space>B
+Open debug REPL | <Space>dr
+Run last debug configuration | <Space>dl
+Terminate debugging | <Space>dt
+Clear all breakpoints | <Space>dc
+Inspect variable hover (normal/visual) | <Space>dh
+Preview variable (normal/visual) | <Space>dp
+Show stack frames | <Space>df
+Show scopes | <Space>ds
+Load trusted project launch.json explicitly | :lua require('dap.ext.vscode').load_launchjs()
+
+## Containers @docker
+# Configured integration, not yet verified against a running Docker project.
+Attach to container | <Space>oca
+Build container image | <Space>ocb
+Docker Compose up | <Space>ocu
+Docker Compose down (stops services) | <Space>ocd
+Docker Compose logs | <Space>ocl
+Open/start/stop/restart/logs (DockerContainer buffer only) | o / s / S / r / l
+
+## Appearance @theme @neon
+Toggle solid/transparent Neon Dusk editor background | <F12>
+Reload Neon Dusk colours | :colorscheme neon_dusk
+# iTerm2 opacity/blur is separate from Neovim background transparency.
+# tmux palette: run in a shell, not as a Neovim command.
+Apply tmux palette (shell) | tmux source-file ~/projects/nvim-config/themes/neon-dusk.tmux.conf
