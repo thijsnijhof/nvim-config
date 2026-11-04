@@ -1,4 +1,5 @@
 {
+  "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "Comment.nvim": { "branch": "master", "commit": "e30b7f2008e52442154b66f7c519bfd2f1e32acb" },
   "LuaSnip": { "branch": "master", "commit": "21e9fecfc07fb2cd707b6c7c3fa148550a34d053" },
   "agentic.nvim": { "branch": "main", "commit": "f0bef086b3ed6121d9a18a5a820d071c69f2f0f5" },

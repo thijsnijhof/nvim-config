@@ -97,3 +97,20 @@ same keys move directly through tmux. Existing tmux directional wrapping and
 zoom behavior are preserved. These keys are reserved in terminal programs;
 prefix then Ctrl-l sends the original clear-screen key.
 LSP signature help is now Space ck. No new navigation plugin is required.
+
+## Project-wide change review
+
+Space gv opens Diffview with staged and unstaged file sections. Tab/Shift-Tab
+cycles changed files; Space e focuses the file tree; Enter opens a selected diff.
+Space gq closes the viewer. Space gf / Space gF opens file / repository history.
+
+Space gV prompts for any branch, tag, or commit and compares
+`git merge-base HEAD <chosen-ref>` with HEAD. It never assumes main/master.
+This shows committed branch changes since the common ancestor, not uncommitted
+edits. Use Space gv for those. Git does not record the original parent branch,
+so choose the intended base explicitly. This command neither fetches nor changes
+branches. For a direct comparison instead, use `:DiffviewOpen ref..HEAD`.
+
+Diffview has context-specific local mappings, including merge-resolution actions;
+use its help inside the view. Existing Fugitive/Gitsigns shortcuts remain available
+outside Diffview. Current working-tree diffs include your edits and AI edits alike.

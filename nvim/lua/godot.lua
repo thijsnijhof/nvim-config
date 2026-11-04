@@ -4,8 +4,7 @@ function M.root()
     return vim.fs.root(file ~= '' and file or vim.fn.getcwd(), { 'project.godot' })
 end
 function M.command()
-    for _, cmd in ipairs({ vim.env.GODOT_BIN or '', 'godot', 'godot4',
-        vim.fn.expand('~/Documents/Godot.app/Contents/MacOS/Godot'),
+    for _, cmd in ipairs({ vim.env.GODOT_BIN or '', require('machine').godot.command or '', 'godot', 'godot4',
         '/Applications/Godot.app/Contents/MacOS/Godot' }) do
         if cmd ~= '' and vim.fn.executable(cmd) == 1 then return cmd end
     end

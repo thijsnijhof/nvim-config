@@ -35,8 +35,7 @@ return {
         formatters = {
             gdformat = {
                 command = function()
-                    if vim.fn.executable('gdformat') == 1 then return 'gdformat' end
-                    return vim.fn.expand('~/Library/Python/3.9/bin/gdformat')
+                    return require('machine').formatting.gdformat
                 end,
             },
             php_cs_fixer = {

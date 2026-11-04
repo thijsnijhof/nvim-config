@@ -59,6 +59,8 @@ require("lazy").setup({
 
     require("plugins.git_signs"),
 
+    require("plugins.diffview"),
+
     require("plugins.lua_line"),
 
     require("plugins.comment"),

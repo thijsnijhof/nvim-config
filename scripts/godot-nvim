@@ -12,7 +12,9 @@ if len(sys.argv) != 5:
 project, filename, line, column = sys.argv[1:]
 project = os.path.normpath(os.path.abspath(project))
 socket = '/tmp/nvim-godot-' + hashlib.sha256(project.encode()).hexdigest()[:16] + '.sock'
-nvim = shutil.which('nvim') or '/opt/homebrew/bin/nvim'
+nvim = os.environ.get('NVIM_BIN') or shutil.which('nvim')
+if not nvim:
+    sys.exit('Set NVIM_BIN to your Neovim executable, or add nvim to PATH.')
 if not Path(socket).exists():
     sys.exit('Open this project in Neovim and a .gd file first, then try again.')
 subprocess.run([nvim, '--server', socket, '--remote', os.path.abspath(filename)], check=True)

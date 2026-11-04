@@ -196,3 +196,17 @@ Run current project from saved files | <Space>ogr
 Choose a scene to run | <Space>ogs
 Format GDScript with gdformat | <Space>fr
 # Open this project in Godot before using GDScript LSP. Reattach with :LspStart gdscript if needed.
+
+## Project-wide diffs @git @diffview @review
+Review staged and unstaged changes across project | <Space>gv
+Compare committed branch changes from chosen ref's merge-base | <Space>gV
+Browse current file history visually | <Space>gf
+Browse repository history visually | <Space>gF
+Close Diffview and return to editor | <Space>gq
+Next/previous changed file (Diffview) | <Tab> / <S-Tab>
+Focus changed-files panel (Diffview) | <Space>e
+Open selected file diff (Diffview panel) | <CR>
+Refresh diff file list | :DiffviewRefresh
+# Space gV accepts any branch/tag/commit; it does not assume main/master.
+# Branch comparison shows committed changes; Space gv shows uncommitted changes.
+# Diffview's local shortcuts replace some editor shortcuts while inside its views.

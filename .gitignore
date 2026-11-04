@@ -1,0 +1,4 @@
+.DS_Store
+.idea/
+*.local.lua
+!examples/*.local.lua
