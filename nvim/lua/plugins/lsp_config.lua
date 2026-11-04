@@ -16,12 +16,13 @@ function M.setup()
         ensure_installed = {
             "lua_ls",
             "ts_ls",
+            "phpactor",
             "pyright",
             "jsonls",
             "sqlls",
             "yamlls"
         },
-        automatic_installation = true,
+        automatic_enable = false,
     })
 
     -- Initialize inlay hints
@@ -29,10 +30,10 @@ function M.setup()
 
     local on_attach = function(client, bufnr)
         -- Set up position encoding
-        client.offset_encoding = client.offset_encoding or 'utf-16'
+        -- Preserve the position encoding negotiated with the server.
 
         -- Enable inlay hints if available
-        if inlay_hint then
+        if inlay_hint and client.supports_method("textDocument/inlayHint") then
             inlay_hint.enable(true, { bufnr = bufnr })
         end
 
@@ -67,18 +68,6 @@ function M.setup()
             })
         end, vim.tbl_extend("force", opts, { desc = "References" }))
 
-        -- Formatting with better options
-        keymap('n', '<leader>fr', function()
-            vim.lsp.buf.format({
-                async = true,
-                timeout_ms = 5000,
-                name = client.name,
-                filter = function(c)
-                    return c.name ~= 'ts_ls' and c.name ~= 'lua_ls'
-                end,
-            })
-        end, vim.tbl_extend("force", opts, { desc = "Format document" }))
-
         -- Toggle inlay hints
         if inlay_hint and client.supports_method('textDocument/inlayHint') then
             keymap('n', 'yh', function()
@@ -93,7 +82,9 @@ function M.setup()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
     -- Set up LspAttach autocommand for keymaps
+    local group = vim.api.nvim_create_augroup('UserLspAttach', { clear = true })
     vim.api.nvim_create_autocmd('LspAttach', {
+        group = group,
         callback = function(args)
             local client = vim.lsp.get_client_by_id(args.data.client_id)
             if client then
@@ -194,10 +185,15 @@ function M.setup()
         root_markers = { '.git' },
     })
 
-    -- Enable all configured servers
-    vim.lsp.enable({ 'ts_ls', 'lua_ls', 'pyright', 'jsonls', 'sqlls', 'yamlls' })
+    -- Use nvim-lspconfig's standard Phpactor command and project detection.
+    -- Mason supplies phpactor on PATH; no generated project config is needed.
+    vim.lsp.config('phpactor', {
+        capabilities = capabilities,
+    })
 
-    vim.notify('LSP configuration loaded successfully')
+    -- Enable all configured servers
+    vim.lsp.enable({ 'ts_ls', 'phpactor', 'lua_ls', 'pyright', 'jsonls', 'sqlls', 'yamlls' })
+
 end
 
 return M

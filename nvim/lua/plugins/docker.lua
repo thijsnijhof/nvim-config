@@ -12,6 +12,13 @@ return {
     "ComposeDown",
     "ComposeLogs",
   },
+  keys = {
+    { "<leader>oca", "<cmd>AttachContainer<CR>", desc = "Container: Attach" },
+    { "<leader>ocb", "<cmd>BuildImage<CR>", desc = "Container: Build image" },
+    { "<leader>ocu", "<cmd>ComposeUp<CR>", desc = "Container: Compose up" },
+    { "<leader>ocd", "<cmd>ComposeDown<CR>", desc = "Container: Compose down" },
+    { "<leader>ocl", "<cmd>ComposeLogs<CR>", desc = "Container: Compose logs" },
+  },
   config = function()
     -- Define keymaps first to avoid conflicts
     local keymap = vim.keymap
@@ -25,13 +32,6 @@ return {
         nvim = true, -- Mount the local Neovim config (for nvim 0.9+)
       },
     })
-    
-    -- Function key mappings for Docker
-    keymap.set('n', '<F6>', ':AttachContainer<CR>', vim.tbl_extend('force', opts, { desc = 'Attach to container' }))
-    keymap.set('n', '<F7>', ':BuildImage<CR>', vim.tbl_extend('force', opts, { desc = 'Build container image' }))
-    keymap.set('n', '<F8>', ':ComposeUp<CR>', vim.tbl_extend('force', opts, { desc = 'Docker Compose Up' }))
-    keymap.set('n', '<F9>', ':ComposeDown<CR>', vim.tbl_extend('force', opts, { desc = 'Docker Compose Down' }))
-    keymap.set('n', '<F10>', ':ComposeLogs<CR>', vim.tbl_extend('force', opts, { desc = 'Docker Compose Logs' }))
     
     -- Buffer-local keymaps for container actions
     vim.api.nvim_create_autocmd('FileType', {

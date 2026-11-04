@@ -23,7 +23,7 @@
 -- - <F5>: Start/Continue debugging
 -- - <F1>: Step into function
 -- - <F2>: Step over line
--- - <F3>: Step out of function
+-- - <F6>: Step out of function
 -- - <leader>b: Toggle breakpoint
 -- - <leader>B: Set conditional breakpoint
 -- - <F7>: Toggle debug UI
@@ -65,26 +65,6 @@ function M.setup()
     }
 
     dap.configurations.typescript = dap.configurations.javascript
-
-    -- Apollo Admin Ecom configuration
-    table.insert(dap.configurations.typescript, {
-        name = 'Debug Apollo Admin Ecom',
-        type = 'node2',
-        request = 'launch',
-        runtimeExecutable = 'npm',
-        runtimeArgs = {'run', 'dev'},
-        cwd = '${workspaceFolder}',
-        console = 'integratedTerminal',
-        sourceMaps = true,
-        protocol = 'inspector',
-        port = 9229,
-        skipFiles = {'<node_internals>/**'},
-        outFiles = {'${workspaceFolder}/dist/**/*.js'},
-        resolveSourceMapLocations = {
-            '${workspaceFolder}/**',
-            '!**/node_modules/**',
-        }
-    })
 
     -- PHP debugging (requires Xdebug)
     dap.adapters.php = {

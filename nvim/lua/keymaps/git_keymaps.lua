@@ -21,7 +21,7 @@ vim.keymap.set('n', '<leader>gm', function()
     end
 end, { desc = 'Show method history' })
 vim.keymap.set('v', '<leader>gm', ":'<,'>Gclog -p<CR>", { desc = 'Show history for selection' })
-vim.keymap.set('n', '<leader>gB', ':Git blame<CR>', { desc = 'Toggle git blame' })
+vim.keymap.set('n', '<leader>gB', ':Git blame<CR>', { desc = 'Open Git blame' })
 
 -- Diff and conflict resolution
 vim.keymap.set("n", "<leader>gd", ":Gvdiffsplit!<CR>", { desc = "Three way diff split" })  -- Three way split
@@ -29,7 +29,7 @@ vim.keymap.set("n", "<leader>gd", ":Gvdiffsplit!<CR>", { desc = "Three way diff 
 -- Conflict resolution
 vim.keymap.set("n", "<leader>gl", "2do", { desc = "Keep LOCAL version (Your changes)" })  -- Local
 vim.keymap.set("n", "<leader>gr", "4do", { desc = "Keep REMOTE version (Their changes)" })  -- Remote
-vim.keymap.set("n", "<leader>gB", "2do:diffget 4<CR>", { desc = "Keep BOTH changes (Local + Remote)" })  -- Both
+vim.keymap.set("n", "<leader>gM", "2do:diffget 4<CR>", { desc = "Keep BOTH changes (Local + Remote)" })  -- Both
 
 -- Navigation through conflicts
 vim.keymap.set("n", "<leader>gn", "]c", { desc = "Next Git conflict" })  -- Move to next conflict

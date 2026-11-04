@@ -1,6 +1,9 @@
 -- Tell the Lua language server that `vim` is a global variable
 _G.vim = vim
 
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 -- setup lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -19,8 +22,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- info: require where plugins > 1
 local git_related = require("plugins.git_related")
-local mason = require("plugins.mason")
-local telescope_setup, telescope_fzf_native_setup = require("plugins.telescope")
+local telescope = require("plugins.telescope")
 -- local darcula = require("plugins.darcula")
 
 -- info: Setup the plugins
@@ -42,90 +44,11 @@ require("lazy").setup({
     git_related[1], -- vim fugitive
     git_related[2], -- vim rhubarb
 
-    mason[1], mason[2],
-
     require("plugins.cmp"),
     
-    -- LSP Configuration
-    {
-        'neovim/nvim-lspconfig',
-        event = 'BufReadPre',
-        dependencies = {
-            'williamboman/mason.nvim',
-            'williamboman/mason-lspconfig.nvim',
-            'hrsh7th/cmp-nvim-lsp',
-        },
-        config = function()
-            require('plugins.lsp_config').setup()
-        end
-    },
-
-    -- Inlay hints on current line
-    require("plugins.inlay_hints"),
-    
-    -- Docker
+    require("plugins.lsp"),
+    require("plugins.formatting"),
     require("plugins.docker"),
-    
-    -- PHP development
-    {
-        'neovim/nvim-lspconfig',
-        ft = 'php',
-        config = function()
-            local lspconfig = require('lspconfig')
-            local capabilities = require('cmp_nvim_lsp').default_capabilities()
-            
-            lspconfig.phpactor.setup {
-                cmd = { os.getenv('HOME') .. '/.composer/vendor/bin/phpactor', 'language-server' },
-                on_attach = function(client, bufnr)
-                    -- Your on_attach configuration here
-                    local bufopts = { noremap=true, silent=true, buffer=bufnr }
-                    vim.keymap.set('n', '<leader>cf', function()
-                        vim.lsp.buf.references({
-                            includeDeclaration = false,
-                            bufnr = bufnr
-                        })
-                    end, vim.tbl_extend('force', bufopts, { desc = 'Find references (optimized)' }))
-                end,
-                capabilities = capabilities,
-                settings = {
-                    phpactor = {
-                        maxMemory = '4G',
-                        enableLanguageServer = true,
-                        indexingEnabled = true,
-                        completionEnabled = true,
-                        indexingExclude = {
-                            'vendor',
-                            'node_modules',
-                            'tests',
-                            'var',
-                            'cache',
-                            'build',
-                            'tmp',
-                        },
-                        references = {
-                            ignoreHidden = true,
-                            ignoreVendors = true,
-                            ignoreTests = true,
-                            limit = 100
-                        }
-                    }
-                }
-            }
-        end
-    },
-
-    {
-        "neovim/nvim-lspconfig",
-        event = { "BufReadPre", "BufNewFile" },
-        dependencies = {
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
-            "hrsh7th/cmp-nvim-lsp",
-        },
-        config = function()
-            require("plugins.lsp_config").setup()
-        end
-    },
 
     -- require("plugins.copilot"),
     -- require("plugins.copilot_chat"),
@@ -139,8 +62,6 @@ require("lazy").setup({
     require("plugins.comment"),
 
     require("plugins.tree_sitter"),
-
-    require("plugins.jester"),
 
     require("plugins.lsp_saga"),
 
@@ -176,8 +97,7 @@ require("lazy").setup({
     require("plugins.nvim_dap"),
     require("plugins.nvim_dap_ui"),
 
-    telescope_setup,
-    telescope_fzf_native_setup,
+    telescope,
     -- add more
 })
 
@@ -193,7 +113,6 @@ require("keymaps.theme_keymaps")
 require("keymaps.general_keymaps")
 require('keymaps.nvim_tree_keymaps')
 require("keymaps.fzf_keymaps")
-require("keymaps.jester_keymaps")
 require("keymaps.lsp_saga_keymaps")
 require("keymaps.neoclip_keymaps")
 require("keymaps.git_keymaps")

@@ -3,7 +3,7 @@
 return {
     "rafamadriz/friendly-snippets",
     event = "InsertEnter",      -- Adjust the event as necessary
-    after = "L3MON4D3/LuaSnip", -- Ensure LuaSnip loads first
+    dependencies = { "L3MON4D3/LuaSnip" },
     config = function()
         local ls = require("luasnip")
 
