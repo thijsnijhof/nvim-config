@@ -30,7 +30,7 @@ require("lazy").setup({
    -- themes
    --darcula,
     -- require("themes.darcula"),
-    require("themes.gruvbox_baby"),
+    -- Neon Dusk is a local colorscheme; Gruvbox files remain available.
 
     -- plugins
     require("plugins.lua_snip"),
@@ -107,6 +107,8 @@ require("lazy").setup({
 require('settings')
 
 
+
+vim.cmd.colorscheme("neon_dusk")
 
 -- info: keymaps setup
 require("keymaps.theme_keymaps")

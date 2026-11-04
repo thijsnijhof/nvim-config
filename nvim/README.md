@@ -59,3 +59,24 @@ Project debugger settings belong in the project's `.vscode/launch.json`;
 load trusted project settings explicitly with
 `:lua require('dap.ext.vscode').load_launchjs()`.
 No Apollo project has been modified or recreated.
+
+## Neon Dusk theme
+
+The local `colors/neon_dusk.lua` theme uses aubergine backgrounds, lavender
+text, pink and cyan accents. No additional theme plugin is needed.
+F12 now toggles solid/transparent editor backgrounds instead of light/dark mode.
+The initial background is solid. For transparency at startup, set
+`vim.g.neon_dusk_transparent = true` before loading the colorscheme.
+
+Import `themes/Neon Dusk.itermcolors` from iTerm2 Settings > Profiles > Colors >
+Color Presets > Import, then select Neon Dusk. Transparency and blur are separate
+profile settings; start with a subtle amount and adjust for readability.
+
+For tmux, add this to your tmux configuration:
+
+```tmux
+source-file ~/projects/nvim-config/themes/neon-dusk.tmux.conf
+```
+
+The tmux and iTerm2 presets are provided for manual activation; your current
+terminal preferences and tmux sessions have not been changed.
