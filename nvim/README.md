@@ -80,3 +80,20 @@ source-file ~/projects/nvim-config/themes/neon-dusk.tmux.conf
 
 The tmux and iTerm2 presets are provided for manual activation; your current
 terminal preferences and tmux sessions have not been changed.
+
+## AI terminal integration
+
+See the repository's `AI.md`. Configure any native CLI in `lua/ai_config.lua`.
+Space ii opens/focuses it in tmux; Space ip chooses from configured commands.
+`DEV_AI_AGENT` overrides the default for a machine or editor invocation.
+Context shortcuts copy to the clipboard; paste and submit in the agent.
+
+## Shared pane navigation
+
+Source `~/projects/nvim-config/tmux/navigation.conf` from `~/.tmux.conf`.
+Ctrl-h/j/k/l moves left/down/up/right in Neovim normal mode, crossing into tmux
+when no editor split exists in that direction. From terminal/agent panes the
+same keys move directly through tmux. Existing tmux directional wrapping and
+zoom behavior are preserved. These keys are reserved in terminal programs;
+prefix then Ctrl-l sends the original clear-screen key.
+LSP signature help is now Space ck. No new navigation plugin is required.

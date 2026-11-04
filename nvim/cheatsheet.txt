@@ -22,8 +22,8 @@ Reveal current file in tree | <F4>
 Toggle Git-ignored files in tree | <F9>
 
 ## Editing @clipboard @windows
-Move to left Neovim window | <C-h>
-Move to right Neovim window | <C-l>
+Move left through Neovim splits and tmux panes | <C-h>
+Move right through Neovim splits and tmux panes | <C-l>
 Move to window above (built-in) | <C-w>k
 Move to window below (built-in) | <C-w>j
 Copy current line to system clipboard | Y
@@ -41,7 +41,7 @@ Go to declaration | gD
 Go to definition | gd
 Go to implementation | gi
 Show references in quickfix list | gr
-Show signature help | <C-k>
+Show signature help | <Space>ck
 Show documentation in Lspsaga hover | K
 Open Lspsaga finder | <Space>cf
 Peek type definition | <Space>ct
@@ -160,3 +160,19 @@ Reload Neon Dusk colours | :colorscheme neon_dusk
 # iTerm2 opacity/blur is separate from Neovim background transparency.
 # tmux palette: run in a shell, not as a Neovim command.
 Apply tmux palette (shell) | tmux source-file ~/projects/nvim-config/themes/neon-dusk.tmux.conf
+
+## AI terminals @ai @codex @kiro
+# Any CLI configured in lua/ai_config.lua; Neovim must run inside tmux.
+Open/focus selected agent pane | <Space>ii
+Choose configured CLI for this editor session | <Space>ip
+Copy file path and current line for agent | <Space>if
+Copy selection with file/line context (visual) | <Space>is
+Copy buffer diagnostics for agent | <Space>id
+# Paste in the agent with Command-V, review, then submit yourself.
+# tmux prefix then semicolon returns to the previous pane.
+
+## Pane navigation @tmux @windows
+Move down through Neovim splits and tmux panes | <C-j>
+Move up through Neovim splits and tmux panes | <C-k>
+Send clear-screen to terminal (default tmux prefix) | <C-b> <C-l>
+# In Neovim, these navigation mappings apply in normal mode.

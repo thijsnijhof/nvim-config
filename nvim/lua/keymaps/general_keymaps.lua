@@ -2,9 +2,8 @@
 vim.keymap.set("n", "<Space>", "<Nop>", { silent = true, remap = false })
 vim.g.mapleader = " "
 
--- free C-l and C-h to navigate between buffers
-vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', { noremap = true })
-vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', { noremap = true })
+-- Shared navigation through editor splits and tmux panes.
+require('navigation').setup()
 
 -- copy to clipboard in visual and copy the whole line in normal mode
 vim.api.nvim_set_keymap('v', 'Y', '"+y', { noremap = true })

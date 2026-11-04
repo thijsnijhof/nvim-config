@@ -108,6 +108,7 @@ require('settings')
 
 
 
+vim.g.neon_dusk_transparent = true
 vim.cmd.colorscheme("neon_dusk")
 
 -- info: keymaps setup
@@ -119,3 +120,6 @@ require("keymaps.lsp_saga_keymaps")
 require("keymaps.neoclip_keymaps")
 require("keymaps.git_keymaps")
 require("keymaps.dap_keymaps")
+
+-- Provider-independent native terminal agent integration.
+require("ai").setup()
