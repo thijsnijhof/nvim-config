@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+"""Godot external editor bridge; targets a project-specific running Neovim."""
+import hashlib
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+if len(sys.argv) != 5:
+    sys.exit('Usage: godot-nvim PROJECT FILE LINE COLUMN')
+project, filename, line, column = sys.argv[1:]
+project = os.path.normpath(os.path.abspath(project))
+socket = '/tmp/nvim-godot-' + hashlib.sha256(project.encode()).hexdigest()[:16] + '.sock'
+nvim = shutil.which('nvim') or '/opt/homebrew/bin/nvim'
+if not Path(socket).exists():
+    sys.exit('Open this project in Neovim and a .gd file first, then try again.')
+subprocess.run([nvim, '--server', socket, '--remote', os.path.abspath(filename)], check=True)
+line, column = max(1, int(line)), max(1, int(column))
+subprocess.run([nvim, '--server', socket, '--remote-send',
+                '<C-\\><C-N>:call cursor(%d,%d)<CR>' % (line, column)], check=True)

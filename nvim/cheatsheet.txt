@@ -189,3 +189,10 @@ Add buffer diagnostics to ACP context | <Space>icD
 # Space ii continues to open the separate native CLI in tmux.
 
 Toggle Agentic chat (single-key alternative) | <F8>
+
+## Godot @gdscript @game
+Open current project's Godot editor | <Space>oge
+Run current project from saved files | <Space>ogr
+Choose a scene to run | <Space>ogs
+Format GDScript with gdformat | <Space>fr
+# Open this project in Godot before using GDScript LSP. Reattach with :LspStart gdscript if needed.

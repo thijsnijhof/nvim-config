@@ -191,8 +191,15 @@ function M.setup()
         capabilities = capabilities,
     })
 
+    -- Godot editor hosts this server; it is not a Mason package.
+    vim.lsp.config('gdscript', {
+        cmd = vim.lsp.rpc.connect('127.0.0.1', tonumber(vim.env.GDScript_Port) or 6005),
+        capabilities = capabilities,
+        root_markers = { 'project.godot' },
+    })
+
     -- Enable all configured servers
-    vim.lsp.enable({ 'ts_ls', 'phpactor', 'lua_ls', 'pyright', 'jsonls', 'sqlls', 'yamlls' })
+    vim.lsp.enable({ 'gdscript', 'ts_ls', 'phpactor', 'lua_ls', 'pyright', 'jsonls', 'sqlls', 'yamlls' })
 
 end
 

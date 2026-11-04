@@ -18,6 +18,7 @@ return {
     },
     opts = {
         formatters_by_ft = {
+            gdscript = { "gdformat" },
             javascript = { "prettier" },
             javascriptreact = { "prettier" },
             typescript = { "prettier" },
@@ -32,6 +33,12 @@ return {
             php = { "php_cs_fixer" },
         },
         formatters = {
+            gdformat = {
+                command = function()
+                    if vim.fn.executable('gdformat') == 1 then return 'gdformat' end
+                    return vim.fn.expand('~/Library/Python/3.9/bin/gdformat')
+                end,
+            },
             php_cs_fixer = {
                 -- Avoid creating a PHP-CS-Fixer cache file in the project.
                 prepend_args = { "--using-cache=no" },

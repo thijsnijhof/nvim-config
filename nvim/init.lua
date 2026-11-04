@@ -125,3 +125,5 @@ require("keymaps.dap_keymaps")
 
 -- Provider-independent native terminal agent integration.
 require("ai").setup()
+
+require("godot").setup()
