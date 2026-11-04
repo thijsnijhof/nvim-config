@@ -29,7 +29,7 @@ vim.wo.signcolumn = "yes"
 -- Decrease update time
 vim.o.updatetime = 250
 vim.o.timeout = true
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 800
 
 -- set encoding to UTF-8
 vim.o.encoding = "UTF-8"

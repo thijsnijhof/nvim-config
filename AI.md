@@ -73,3 +73,34 @@ normal choice, `DEV_AI_AGENT` for a machine/session override, or Space ip to
 choose any configured agent. Executables must be installed and authenticated
 separately. Arbitrary shell snippets are intentionally not evaluated; use a
 wrapper executable for commands requiring special environment setup.
+
+## Agentic.nvim: optional ACP interface
+
+Installed alongside the native terminal launcher. No tmux session is needed for
+Agentic itself. `Space icc` opens the chat; type in the prompt buffer with `i`,
+then use Ctrl-s, or Esc followed by Enter, to submit. The chat is a regular
+Neovim buffer, so normal scrolling/navigation works there.
+
+`Space icf` adds the file or visual selection, `Space icp` selects a provider,
+`Space icn` starts a new session, and `Space icr` restores a session.
+`Space icd` / `Space icD` adds line / buffer diagnostics. Existing terminal
+shortcuts, including Space ii, remain separate.
+
+Configure provider commands in `nvim/lua/acp_config.lua`. Override the startup
+provider with `DEV_ACP_AGENT=kiro-acp nvim .` on a work machine with Kiro
+installed. Kiro is configured as `kiro-cli acp` but has not been tested here.
+Add any other ACP-compatible command under `acp_providers`.
+
+Agentic is pinned to f0bef086b3ed6121d9a18a5a820d071c69f2f0f5.
+Codex ACP is pinned to @agentclientprotocol/codex-acp@2.5.0, installed with:
+
+```sh
+npm install --prefix ~/.local/share/dev-ai --save-exact @agentclientprotocol/codex-acp@2.5.0
+```
+
+The adapter uses its packaged compatible Codex dependency. It does not rely
+on the ChatGPT application's private binary path. Existing ChatGPT login was
+accepted in the setup check. No API key was configured. ACP initialization and
+session creation were verified; a model prompt was not submitted during setup.
+Review permission requests in the Agentic UI; no automatic permission bypass
+is configured.

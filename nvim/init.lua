@@ -45,6 +45,8 @@ require("lazy").setup({
     git_related[2], -- vim rhubarb
 
     require("plugins.cmp"),
+
+    require("plugins.agentic"),
     
     require("plugins.lsp"),
     require("plugins.formatting"),

@@ -176,3 +176,16 @@ Move down through Neovim splits and tmux panes | <C-j>
 Move up through Neovim splits and tmux panes | <C-k>
 Send clear-screen to terminal (default tmux prefix) | <C-b> <C-l>
 # In Neovim, these navigation mappings apply in normal mode.
+
+## Agentic ACP chat @ai @acp @agentic
+Toggle Agentic chat | <Space>icc
+Add current file or visual selection to ACP context | <Space>icf
+Create new ACP session | <Space>icn
+Restore ACP session | <Space>icr
+Choose ACP provider | <Space>icp
+Add current-line diagnostics to ACP context | <Space>icd
+Add buffer diagnostics to ACP context | <Space>icD
+# In the Agentic prompt: Enter in normal mode or Ctrl-s submits.
+# Space ii continues to open the separate native CLI in tmux.
+
+Toggle Agentic chat (single-key alternative) | <F8>
